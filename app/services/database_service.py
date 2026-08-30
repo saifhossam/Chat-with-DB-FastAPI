@@ -19,5 +19,3 @@ class DatabaseService:
         if not database:
             raise DatabaseNotFoundError("Database connection was not found")
         return database
-
-    ss
