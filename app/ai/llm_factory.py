@@ -39,8 +39,7 @@ class GeminiProvider:
         return response.text or "Gemini returned an empty answer."
 
     def answer_stream(self, question: str, schema: str, rows: list[dict]):
-        """نفس answer بس بترجع الاجابة جزء جزء اول ما توصل من Gemini،
-        مش كل الرد مرة واحدة في الآخر."""
+
         if not self.client:
             yield f"Found {len(rows)} row(s) for: {question}"
             return

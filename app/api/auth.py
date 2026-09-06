@@ -1,4 +1,3 @@
-"""Authentication endpoints."""
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
@@ -19,7 +18,7 @@ def current_user_id(credentials: HTTPAuthorizationCredentials = Depends(bearer))
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Authentication required")
     try:
         payload = jwt.decode(credentials.credentials, settings.secret_key, algorithms=["HS256"])
-        return str(payload["sub"])
+        return str(payload["sub"]) # sub carries the user id
     except (JWTError, KeyError) as error:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from error
 

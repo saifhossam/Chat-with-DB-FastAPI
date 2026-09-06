@@ -26,8 +26,25 @@ class DatabaseNotFoundError(DomainError):
 class UnsafeSqlError(DomainError):
     status_code = 422
 
+
 class DatabaseConnectionError(DomainError):
     status_code = 400
+
+
+class BlockedInputError(DomainError):
+    """Input failed guardrail checks."""
+    status_code = 400
+
+
+class InvalidOutputError(DomainError):
+    """Output failed guardrail checks."""
+    status_code = 400
+
+
+class RateLimitExceededError(DomainError):
+    """Rate limit exceeded."""
+    status_code = 429
+
     
 async def domain_error_handler(_: Request, exc: DomainError) -> JSONResponse:
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})

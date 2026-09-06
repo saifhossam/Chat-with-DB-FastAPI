@@ -1,7 +1,6 @@
-"""Postgres-backed repository for conversations and their messages."""
 from sqlalchemy.orm import Session
 
-from app.database.models import Conversation
+from app.database.models import Conversation, Message
 
 
 class ConversationRepository:
@@ -9,8 +8,32 @@ class ConversationRepository:
         self.db = db
 
     def save(self, conversation: Conversation) -> Conversation:
-        # الرسايل (Message objects) بتتحفظ تلقائي مع الـ conversation بسبب الـ relationship
         self.db.add(conversation)
         self.db.commit()
         self.db.refresh(conversation)
         return conversation
+
+    def update_message(
+        self,
+        message_id: str,
+        content: str,
+        sql: str | None = None,
+    ) -> Message:
+        message = (
+            self.db.query(Message)
+            .filter(Message.id == message_id)
+            .first()
+        )
+
+        if not message:
+            raise ValueError(
+                f"Message not found: {message_id}"
+            )
+
+        message.content = content
+        message.sql = sql
+
+        self.db.commit()
+        self.db.refresh(message)
+
+        return message
